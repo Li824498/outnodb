@@ -1,4 +1,4 @@
 package server.dm.page;
 
-public class pageOne {
+public class PageX {
 }
