@@ -4,6 +4,8 @@ import server.tm.TransactionManagerImpl;
 
 import java.nio.ByteBuffer;
 
+import static server.dm.page.PageX.OF_DATE;
+
 public class Parser {
 
     public static long byte2long(byte[] buf) {
@@ -13,5 +15,14 @@ public class Parser {
 
     public static byte[] long2byte(long xidCounter) {
         return ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(xidCounter).array();
+    }
+
+    public static byte[] short2byte(short fso) {
+        return ByteBuffer.allocate(Short.SIZE / Byte.SIZE).putShort(fso).array();
+    }
+
+    public static short byte2short(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, 0, OF_DATE);
+        return buffer.getShort();
     }
 }
