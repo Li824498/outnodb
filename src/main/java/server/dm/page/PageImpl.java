@@ -1,10 +1,15 @@
 package server.dm.page;
 
 import server.dm.pageCache.PageCache;
-import server.dm.pageCache.PageCacheImpl;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+/**
+ * 通用页存取类
+ * 只提供所有页存取的公共逻辑部分，需配合pageX和pageOne完成完整的存取操作
+ *
+ */
 
 public class PageImpl implements Page{
 
