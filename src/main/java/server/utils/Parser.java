@@ -25,4 +25,12 @@ public class Parser {
         ByteBuffer buffer = ByteBuffer.wrap(bytes, 0, OF_DATE);
         return buffer.getShort();
     }
+
+    public static byte[] int2byte(int i) {
+        return ByteBuffer.allocate(Integer.SIZE / Byte.SIZE).putInt(i).array();
+    }
+
+    public static int byte2int(byte[] array) {
+        return ByteBuffer.wrap(array).getInt();
+    }
 }

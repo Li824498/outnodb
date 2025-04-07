@@ -16,4 +16,9 @@ public class Error {
     public static RuntimeException BadXidFileException() {
         return new RuntimeException("Bad Xid File!");
     }
+
+    public static Exception BadLogFileException() {
+        return new RuntimeException("Bad Log File!");
+
+    }
 }
