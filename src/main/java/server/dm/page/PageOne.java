@@ -22,7 +22,7 @@ public class PageOne {
 
     public static void setVcOpen(Page pg) {
         pg.setDirty(true);
-        setVcOpenRaw(pg.getDate());
+        setVcOpenRaw(pg.getData());
     }
 
     private static void setVcOpenRaw(byte[] date) {
@@ -34,7 +34,7 @@ public class PageOne {
 
     public static void setVcClose(Page pg) {
         pg.setDirty(true);
-        setVcCloseRaw(pg.getDate());
+        setVcCloseRaw(pg.getData());
     }
 
     private static void setVcCloseRaw(byte[] date) {
@@ -42,6 +42,6 @@ public class PageOne {
     }
 
     public static boolean checkVc(Page pg) {
-        return Arrays.equals(Arrays.copyOfRange(pg.getDate(), OF_VC, OF_VC + LEN_VC), Arrays.copyOfRange(pg.getDate(), OF_VC + LEN_VC, OF_VC + LEN_VC * 2));
+        return Arrays.equals(Arrays.copyOfRange(pg.getData(), OF_VC, OF_VC + LEN_VC), Arrays.copyOfRange(pg.getData(), OF_VC + LEN_VC, OF_VC + LEN_VC * 2));
     }
 }

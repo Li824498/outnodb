@@ -58,7 +58,7 @@ public class PageImpl implements Page{
     }
 
     @Override
-    public byte[] getDate() {
+    public byte[] getData() {
         return date;
     }
 }

@@ -25,7 +25,7 @@ public class PageX {
     }
 
     public static short getFSO(Page page) {
-        return getFSO(page.getDate());
+        return getFSO(page.getData());
     }
 
     public static short getFSO(byte[] page) {
@@ -40,22 +40,22 @@ public class PageX {
         page.setDirty(true);
         short offset = getFSO(page);
         System.arraycopy(raw, 0, page, offset, raw.length);
-        setFSO(page.getDate(), (short) (offset + raw.length));
+        setFSO(page.getData(), (short) (offset + raw.length));
         return offset;
     }
 
     public static void recoverInsert(Page page, byte[] raw, short offset) {
         page.setDirty(true);
-        System.arraycopy(raw, 0, page.getDate(), offset, raw.length);
+        System.arraycopy(raw, 0, page.getData(), offset, raw.length);
 
         if(offset + raw.length > getFSO(page)) {
-            setFSO(page.getDate(), (short)(offset + raw.length));
+            setFSO(page.getData(), (short)(offset + raw.length));
         }
     }
 
     public static void recoverUpdate(Page page, byte[] raw, short offset) {
         page.setDirty(true);
-        System.arraycopy(raw, 0, page.getDate(), offset, raw.length);
+        System.arraycopy(raw, 0, page.getData(), offset, raw.length);
     }
 
 }

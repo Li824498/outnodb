@@ -80,7 +80,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache{
         lock.lock();
         try {
             fc.position(offset);
-            fc.write(ByteBuffer.wrap(page.getDate()));
+            fc.write(ByteBuffer.wrap(page.getData()));
             fc.force(false);
         } catch (IOException e) {
             Panic.panic(e);
