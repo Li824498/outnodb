@@ -1,6 +1,8 @@
 package server.dm;
 
+import com.google.common.primitives.Bytes;
 import server.dm.dataItem.DataItem;
+import server.dm.dataItem.DataItemImpl;
 import server.dm.logger.Logger;
 import server.dm.page.Page;
 import server.dm.page.PageX;
@@ -21,6 +23,7 @@ import java.util.LinkedList;
  */
 public class Recover {
     private static final byte LOG_TYPE_INSERT = 0;
+    private static final byte LOG_TYPE_UPDATE = 1;
     private static final int OF_XID = 1;
     private static final int LEN_XID = 8;
 
@@ -33,6 +36,24 @@ public class Recover {
     private static final int OF_UID = OF_XID + LEN_XID;
     private static final int LEN_UID = 8;
     private static final int OF_UPDATE_RAW = OF_UID + LEN_UID;
+
+    public static byte[] updateLog(Long xid, DataItemImpl di) {
+        byte[] logTypeBytes = new byte[]{LOG_TYPE_UPDATE};
+        byte[] xidBytes = Parser.long2byte(xid);
+        byte[] uidBytes = Parser.long2byte(di.getUid());
+        byte[] oldRaw = di.getOldRaw();
+        byte[] newRaw = di.getRaw().getData();
+        return Bytes.concat(logTypeBytes, xidBytes, uidBytes, oldRaw, newRaw);
+    }
+
+    public static byte[] insertLog(long xid, Page pg, byte[] raw) {
+        byte[] logTypeBytes = new byte[]{LOG_TYPE_INSERT};
+        byte[] xidBytes = Parser.long2byte(xid);
+        byte[] pgnoBytes = Parser.int2byte(pg.getPageNumber());
+        byte[] offsetBytes = Parser.short2byte(PageX.getFSO(pg));
+        byte[] rawBytes = raw;
+        return Bytes.concat(logTypeBytes, xidBytes, pgnoBytes, offsetBytes, rawBytes);
+    }
 
 
     static class InsertLogInfo {

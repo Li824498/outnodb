@@ -1,6 +1,8 @@
 package server.dm.dataItem;
 
 import common.SubArray;
+import server.dm.DataManager;
+import server.dm.DataManagerImpl;
 import server.dm.page.Page;
 
 import java.util.concurrent.locks.Lock;
@@ -26,9 +28,9 @@ public class DataItemImpl implements DataItem{
     private Lock wLock;
     private Page pg;
     private long uid;
-    private DataItem dm;
+    private DataManagerImpl dm;
 
-    public DataItemImpl(SubArray raw, byte[] oldRaw, Page pg, long uid, DataItemImpl dm) {
+    public DataItemImpl(SubArray raw, byte[] oldRaw, Page pg, long uid, DataManagerImpl dm) {
         this.raw = raw;
         this.oldRaw = oldRaw;
         this.pg = pg;

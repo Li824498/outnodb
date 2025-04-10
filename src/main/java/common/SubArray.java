@@ -1,5 +1,7 @@
 package common;
 
+import java.util.Arrays;
+
 public class SubArray {
     public byte[] raw;
     public int start;
@@ -9,5 +11,9 @@ public class SubArray {
         this.raw = raw;
         this.start = start;
         this.end = end;
+    }
+
+    public byte[] getData() {
+        return Arrays.copyOfRange(raw, start, end);
     }
 }

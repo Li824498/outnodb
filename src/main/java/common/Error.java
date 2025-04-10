@@ -21,4 +21,12 @@ public class Error {
         return new RuntimeException("Bad Log File!");
 
     }
+
+    public static Exception DataTooLargeException() {
+        return new RuntimeException("Data too large!");
+    }
+
+    public static Exception DataBaseBusyException() {
+        return new RuntimeException("DataBase is too busy!");
+    }
 }

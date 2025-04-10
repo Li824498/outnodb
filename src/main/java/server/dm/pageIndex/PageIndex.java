@@ -33,13 +33,13 @@ public class PageIndex {
         lockAll = new ReentrantLock();
     }
 
-    public void add(Page page, int freeSpace) {
+    public void add(int pgno, int freeSpace) {
         int number = freeSpace / THRESHOLD;
         locks[number].lock();
         try {
             lockAll.lock();
             try {
-                lists[number].add(new PageInfo(page, freeSpace));
+                lists[number].add(new PageInfo(pgno, freeSpace));
             } catch (Exception e) {
                 Panic.panic(e);
             } finally {

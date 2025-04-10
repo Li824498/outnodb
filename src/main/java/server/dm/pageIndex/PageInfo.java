@@ -3,11 +3,11 @@ package server.dm.pageIndex;
 import server.dm.page.Page;
 
 public class PageInfo {
-    Page page;
-    int freeSpace;
+    public int pgno;
+    public int freeSpace;
 
-    PageInfo(Page page, int freeSpace) {
-        this.page = page;
+    PageInfo(int pgno, int freeSpace) {
+        this.pgno = pgno;
         this.freeSpace = freeSpace;
     }
 }

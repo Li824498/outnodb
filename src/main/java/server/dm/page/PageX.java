@@ -14,6 +14,8 @@ public class PageX {
     public static final short OF_FREE = 0;
     public static final short OF_DATE = 2;
 
+    public static final int MAX_FREE_SPACE = PageCache.PAGE_SIZE - 2;
+
     public static byte[] initRaw() {
         byte[] page = new byte[PageCache.PAGE_SIZE];
         setFSO(page, OF_DATE);
