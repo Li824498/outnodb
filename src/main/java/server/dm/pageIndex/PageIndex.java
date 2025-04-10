@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 3. 不剥夺条件：锁不能被其他线程强行夺走，必须由持有线程释放。
  * 4. 循环等待条件：线程没有形成相互等待的循环，因此不会发生死锁。
  */
-
+// todo 错误的并发细粒度优化，修改
 public class PageIndex {
     private static final int INTERVALS_NO = 40;
     private static final int THRESHOLD = PageCache.PAGE_SIZE / INTERVALS_NO;
