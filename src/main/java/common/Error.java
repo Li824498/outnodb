@@ -32,4 +32,8 @@ public class Error {
     public static Exception DataBaseBusyException() {
         return new RuntimeException("DataBase is too busy!");
     }
+
+    public static Exception DeadLockException() {
+        return new RuntimeException("Has Dead Lock!");
+    }
 }
