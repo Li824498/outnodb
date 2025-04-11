@@ -17,6 +17,7 @@ import server.utils.Types;
 
 public class DataManagerImpl extends AbstractCache<DataItem> implements DataManager{
     public PageCache pc;
+    // todo tm是不是可以删掉？
     public TransactionManager tm;
     public Logger lg;
     public PageIndex pIndex;

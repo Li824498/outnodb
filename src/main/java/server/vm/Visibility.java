@@ -4,7 +4,14 @@ import server.tm.TransactionManager;
 
 public class Visibility {
 
-    public static boolean isVersionSkip() {
+    // todo 版本跳跃api
+    public static boolean isVersionSkip(TransactionManager tm, Transaction t, Entry entry) {
+        long xmax = entry.getXmax();
+        if(t.level == 0) {
+            return false;
+        } else {
+            return tm.isCommitted(xmax) && (xmax > t.xid || t.isInSnapshot(xmax));
+        }
         return false;
     }
 
