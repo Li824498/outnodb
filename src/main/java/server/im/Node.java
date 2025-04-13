@@ -2,7 +2,7 @@ package server.im;
 
 import common.SubArray;
 import server.dm.dataItem.DataItem;
-import server.dm.dataItem.DataItemImpl;
+import server.tm.TransactionManagerImpl;
 import server.utils.Parser;
 
 import java.util.ArrayList;
@@ -15,6 +15,17 @@ import java.util.List;
  * 0 -------1----------3-----------11
  * [Son0][Key0][Son1][Key1]...[SonN][KeyN]
  */
+
+/**
+ * Node结构如下（逻辑上）：
+ * [LeafFlag][KeyNumber][SiblingUid]
+ * [Son0][Key0][Son1][Key1]...[SonN-1][KeyN-1][SonN]
+ *
+ * 说明：
+ * - 对于非叶子节点：Son 数量 = Key 数量 + 1
+ * - 对于叶子节点：Son 和 Key 一一对应
+ */
+
 public class Node {
 
     private static final int LEAF_OFFSET = 0;
@@ -73,6 +84,14 @@ public class Node {
     static long getRawKthKey(SubArray raw, int kth) {
         int offset = raw.start + NODE_HEADER_SIZE + kth * (2 * 8) + 8;
         return Parser.byte2long(Arrays.copyOfRange(raw.raw, offset, offset + 8));
+    }
+
+    private void shiftRawKth(SubArray raw, int kth) {
+        int begin = raw.start + NODE_HEADER_SIZE + (kth + 1) * (2 * 8);
+        int end = raw.start + NODE_SIZE - 1;
+        for (int i = end; i >= begin; i--) {
+            raw.raw[i] = raw.raw[i - 2 * 8];
+        }
     }
 
     // todo 干啥用的
@@ -187,5 +206,108 @@ public class Node {
         } finally {
             dataItem.rUnlock();
         }
+
+
+    }
+
+    class InsertAndSplitRes {
+        long siblingUid;
+        long newSon;
+        long newKey;
+    }
+
+    public InsertAndSplitRes insertAndSplit(long uid, long key) throws Exception {
+        boolean success = false;
+        Exception err = null;
+        InsertAndSplitRes res = new InsertAndSplitRes();
+
+        try {
+            success = insert(uid, key);
+            if (!success) {
+                res.siblingUid = getRawSibling(raw);
+                return res;
+            }
+            if(needSplit()) {
+                try {
+                    SplitRes r = split();
+                    res.newSon = r.newSon;
+                    res.newKey = r.newKey;
+                    return res;
+                } catch (Exception e) {
+                    err = e;
+                    throw e;
+                }
+            } else {
+                return res;
+            }
+        } finally {
+            if (err == null && success) {
+                dataItem.after(TransactionManagerImpl.SUPER_ID);
+            } else {
+                dataItem.unBefore();
+            }
+        }
+    }
+
+    class SplitRes {
+        long newSon;
+        long newKey;
+    }
+
+    public SplitRes split() throws Exception {
+        SubArray nodeRaw = new SubArray(new byte[NODE_SIZE], 0, NODE_SIZE);
+        setRawIsLeaf(nodeRaw, getRawIsLeaf(raw));
+        setRawNoKeys(nodeRaw, BALANCE_NUMBER);
+        setRawSibling(nodeRaw, getRawSibling(raw));
+        copyRawFromKth(raw, nodeRaw, BALANCE_NUMBER);
+        long son = tree.dm.insert(TransactionManagerImpl.SUPER_ID, nodeRaw.raw);
+        setRawNoKeys(raw, BALANCE_NUMBER);
+        setRawSibling(raw, son);
+
+        SplitRes splitRes = new SplitRes();
+        splitRes.newSon = son;
+        splitRes.newKey = getRawKthKey(nodeRaw, 0);
+        return splitRes;
+    }
+
+    private void copyRawFromKth(SubArray from, SubArray to, int kth) {
+        System.arraycopy(from.raw, from.start + NODE_HEADER_SIZE + kth * 2 * 8, to, to.start + NODE_HEADER_SIZE, kth * 2 * 8);
+    }
+
+    private boolean needSplit() {
+        return BALANCE_NUMBER * 2 == getRawNoKeys(raw);
+    }
+
+    private boolean insert(long uid, long key) {
+        int noKeys = getRawNoKeys(raw);
+        int kth = 0;
+        while (kth < noKeys) {
+            long tempKey = getRawKthKey(raw, kth);
+            if (tempKey < key) {
+                kth++;
+            } else {
+                break;
+            }
+        }
+        if (kth == noKeys && getRawSibling(raw) != 0) return false;
+
+        if (getRawIsLeaf(raw)) {
+            shiftRawKth(raw, kth);
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Is leaf: ").append(getRawIsLeaf(raw)).append("\n");
+        int KeyNumber = getRawNoKeys(raw);
+        sb.append("KeyNumber: ").append(KeyNumber).append("\n");
+        sb.append("sibling: ").append(getRawSibling(raw)).append("\n");
+        for(int i = 0; i < KeyNumber; i ++) {
+            sb.append("son: ").append(getRawKthSon(raw, i)).append(", key: ").append(getRawKthKey(raw, i)).append("\n");
+        }
+        return sb.toString();
     }
 }
