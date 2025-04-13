@@ -32,7 +32,7 @@ public class Entry {
     }
 
     public static Entry loadEntry(long uid, VersionManager vm) {
-        DataItem dm = ((VersionManagerImpl)vm).dm.read(uid);
+        DataItem dm = ((VersionManagerImpl) vm).dm.read(uid);
         return newEntry(uid, dm, vm);
     }
 

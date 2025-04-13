@@ -2,7 +2,7 @@ package common;
 
 public class Error {
     public static Exception NullEntryException = new RuntimeException("Null entry!");
-    public static Object ConcurrentUpdateException = new RuntimeException("Concurrent update issue!");
+    public static Exception ConcurrentUpdateException = new RuntimeException("Concurrent update issue!");
 
     public static RuntimeException FileExistsException() {
         return new RuntimeException("File already exists!");

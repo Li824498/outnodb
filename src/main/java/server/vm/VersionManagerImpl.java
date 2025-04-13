@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class VersionManagerImpl extends AbstractCache<Entry> implements VersionManager{
 
     private TransactionManager tm;
-    private DataManager dm;
+    public DataManager dm;
     private Lock lock;
     // todo 是不是能优化成chm
     private Map<Long, Transaction> activeTransaction;
@@ -31,7 +31,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
 
 
     @Override
-    public byte[] read(long xid, long uid) {
+    public byte[] read(long xid, long uid) throws Exception {
         // todo 为什么要加锁？
         lock.lock();
         Transaction t = activeTransaction.get(xid);
@@ -63,7 +63,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
     }
 
     @Override
-    public long insert(long xid, byte[] data) {
+    public long insert(long xid, byte[] data) throws Exception {
         lock.lock();
         Transaction t = activeTransaction.get(xid);
         lock.unlock();
@@ -78,7 +78,7 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
     }
 
     @Override
-    public boolean delete(long xid, long uid) {
+    public boolean delete(long xid, long uid) throws Exception {
         lock.lock();
         Transaction t = activeTransaction.get(xid);
         lock.unlock();

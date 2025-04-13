@@ -4,9 +4,9 @@ import server.dm.DataManager;
 import server.tm.TransactionManager;
 
 public interface VersionManager {
-    byte[] read(long xid, long uid);
-    long insert(long xid, byte[] data);
-    boolean delete(long xid, long uid);
+    byte[] read(long xid, long uid) throws Exception;
+    long insert(long xid, byte[] data) throws Exception;
+    boolean delete(long xid, long uid) throws Exception;
 
     long begin(int level);
     void commit(long xid);

@@ -12,7 +12,6 @@ public class Visibility {
      * 禁止用户发生这种行为：逻辑物理不一致，检测到这种行为就报错
      * @param tm
      * @param t
-     * @param e
      * @return
      */
     public static boolean isVersionSkip(TransactionManager tm, Transaction t, Entry entry) {
@@ -23,7 +22,6 @@ public class Visibility {
         } else {
             return tm.isCommitted(xmax) && (xmax > t.xid || t.isInSnapshot(xmax));
         }
-        return false;
     }
 
     public static boolean isVisible(TransactionManager tm, Transaction t, Entry e) {
