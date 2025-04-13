@@ -103,8 +103,39 @@ public class LockTable {
         if (xids.size() == 0) waitList.remove(uid);
     }
 
+    Map<Long, Integer> xidStamp;
+    Integer stamp;
+
     private boolean hasDeadLock() {
+        xidStamp = new HashMap<>();
+        stamp = 1;
+        for (Long xid : waitting.keySet()) {
+            if (xidStamp.containsKey(xid)) {
+                continue;
+            }
+            if (dfs(xid)) {
+                return true;
+            }
+            stamp++;
+        }
         return false;
+    }
+
+    private boolean dfs(Long xid) {
+        Integer s = xidStamp.get(xid);
+        if (s != null && s.equals(stamp)) {
+            return true;
+        }
+        if (s != null && s < stamp) {
+            return false;
+        }
+        xidStamp.put(xid, stamp);
+
+        Long uid = waitting.get(xid);
+        if (uid == null) return false;
+        Long nextXid = u2x.get(uid);
+        assert nextXid != null;
+        return dfs(nextXid);
     }
 
     private void removeFromList(Map<Long, List<Long>> waitList, long uid, long xid) {
