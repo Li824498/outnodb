@@ -7,11 +7,17 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 记录资源获取详情
+ * 随时检测死锁
+ */
 public class LockTable {
     private Map<Long, List<Long>> x2u;
     private Map<Long, Long> u2x;
-    private Map<Long, Long> waitting;
+    // waitList向上抽象的等待队列，服务于多线程
     private Map<Long, List<Long>> waitList;
+    // waitting将waitList串行化为一个个获取资源的过程，方便进行死锁检测
+    private Map<Long, Long> waitting;
     private Map<Long, Lock> waitLock;
     private Lock lock;
 
