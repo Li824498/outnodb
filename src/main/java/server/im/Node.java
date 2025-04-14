@@ -141,7 +141,7 @@ public class Node {
         }
     }
 
-    class SearchNextRes {
+    public class SearchNextRes {
         long uid;
         long siblingUid;
     }
