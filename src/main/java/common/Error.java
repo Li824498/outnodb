@@ -36,4 +36,8 @@ public class Error {
     public static Exception DeadLockException() {
         return new RuntimeException("Has Dead Lock!");
     }
+
+    public static Exception InvalidCommandException() {
+        return new RuntimeException("Invalid command!");
+    }
 }
