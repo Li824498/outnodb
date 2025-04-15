@@ -40,4 +40,8 @@ public class Error {
     public static Exception InvalidCommandException() {
         return new RuntimeException("Invalid command!");
     }
+
+    public static Exception TableNoIndexException() {
+        return new Exception("Table has no index!");
+    }
 }
