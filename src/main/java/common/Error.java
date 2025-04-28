@@ -68,4 +68,12 @@ public class Error {
     public static Exception InvalidLogOpException() {
         return new RuntimeException("LogOp is Invalid");
     }
+
+    public static Exception InvalidPkgDataException() {
+        return new RuntimeException("Package is invalid");
+    }
+
+    public static Exception InvalidMemException() {
+        return new RuntimeException("Invalid mem num !");
+    }
 }
