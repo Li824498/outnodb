@@ -42,6 +42,30 @@ public class Error {
     }
 
     public static Exception TableNoIndexException() {
-        return new Exception("Table has no index!");
+        return new RuntimeException("Table has no index!");
+    }
+
+    public static Exception DuplicatedTableException() {
+        return new RuntimeException("Duplicated table!");
+    }
+
+    public static Exception TableNotFoundException() {
+        return new RuntimeException("Table not found");
+    }
+
+    public static Exception InvalidValuesException() {
+        return new RuntimeException("Value invalid");
+    }
+
+    public static Exception FieldNotIndexedException() {
+        return new RuntimeException("Not Index!");
+    }
+
+    public static Exception FieldNotFoundException() {
+        return new RuntimeException("Field not found");
+    }
+
+    public static Exception InvalidLogOpException() {
+        return new RuntimeException("LogOp is Invalid");
     }
 }

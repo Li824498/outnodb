@@ -14,7 +14,7 @@ public interface TableManager {
     byte[] create(long xid, Create create) throws Exception;
 
     byte[] insert(long xid, Insert insert) throws Exception;
-    byte[] read(long xid, Select select) throws Exception;
+    byte[] read(long xid, Select read) throws Exception;
     byte[] update(long xid, Update update) throws Exception;
     byte[] delete(long xid, Delete delete) throws Exception;
 

@@ -92,7 +92,7 @@ public class BPlusTree {
         return searchRange(key, key);
     }
 
-    private List<Long> searchRange(long leftKey, long rightKey) {
+    public List<Long> searchRange(long leftKey, long rightKey) {
         long rootUid = rootUid();
         long leafUid = searchLeaf(rootUid, leftKey);
         List<Long> uids = new ArrayList<>();
